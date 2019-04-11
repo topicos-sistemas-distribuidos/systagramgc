@@ -8,7 +8,7 @@ public class Constantes {
 	public static final String filePathQRCode = System.getProperty("user.dir") + FileSystems.getDefault().getSeparator() + "coupons";
 	public static String uploadUserDirectory = System.getProperty("user.dir") + FileSystems.getDefault().getSeparator() + "users";
 	public static String picturesDirectory = System.getProperty("user.dir") + FileSystems.getDefault().getSeparator() + "uploads" + FileSystems.getDefault().getSeparator() + "pictures";
-	public static String bucketPrincipal = "systagram-bucket";
-	public static String s3awsurl = "https://storage.cloud.google.com/systagram-bucket/";
+	public static String bucketPrincipal = "systagramgae.appspot.com";
+	public static String s3awsurl = "https://storage.googleapis.com/systagramgae.appspot.com/";
 	
 }

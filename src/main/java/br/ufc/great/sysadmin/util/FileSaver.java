@@ -28,8 +28,8 @@ public class FileSaver {
 	private void init() {
 		try {
 			storageOptions = StorageOptions.newBuilder()
-					.setProjectId("systagramgc")
-					.setCredentials(GoogleCredentials.fromStream(new FileInputStream("systagramgc-2786ca27d37f.json"))).build();
+					.setProjectId("systagramgae")
+					.setCredentials(GoogleCredentials.fromStream(new FileInputStream("systagramgae-29e1bbb5392c.json"))).build();
 			System.out.println("Configurações do Bucket carregadas com sucesso!");
 		} catch (IOException e) {
 			System.out.println("Erro ao carregar as configurações do Bucket.");
@@ -38,6 +38,7 @@ public class FileSaver {
 		storage = storageOptions.getService();
 	}
 		
+	/*
 	public String write(String baseFolder, MultipartFile file) {
         try {
         	String realPath = request.getServletContext().getRealPath("/" + baseFolder);
@@ -52,6 +53,7 @@ public class FileSaver {
             throw new RuntimeException(e);
         }
     }
+    */
 		
 	public String write(MultipartFile file, String type) {
 		BlobInfo blobInfo = null;
@@ -59,10 +61,10 @@ public class FileSaver {
 		init();
 		try {
 			if (type.equals("users")) {
-				blobInfo = storage.create(BlobInfo.newBuilder("systagram-bucket", "users/"+file.getOriginalFilename()).build(), file.getBytes(), BlobTargetOption.predefinedAcl(PredefinedAcl.PUBLIC_READ));
+				blobInfo = storage.create(BlobInfo.newBuilder("systagramgae.appspot.com", "users/"+file.getOriginalFilename()).build(), file.getBytes(), BlobTargetOption.predefinedAcl(PredefinedAcl.PUBLIC_READ));
 			}
 			if (type.equals("pictures")) {
-				blobInfo = storage.create(BlobInfo.newBuilder("systagram-bucket", "uploads/pictures/"+file.getOriginalFilename()).build(), file.getBytes(), BlobTargetOption.predefinedAcl(PredefinedAcl.PUBLIC_READ));
+				blobInfo = storage.create(BlobInfo.newBuilder("systagramgae.appspot.com", "uploads/pictures/"+file.getOriginalFilename()).build(), file.getBytes(), BlobTargetOption.predefinedAcl(PredefinedAcl.PUBLIC_READ));
 			}
 		} catch (IOException e) {
 			System.out.println("Erro ao acessar o Bucket systagram-bucket");

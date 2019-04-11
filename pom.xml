@@ -6,7 +6,7 @@
 	<groupId>br.ufc.great.sysadmin</groupId>
 	<artifactId>systagramgc</artifactId>
 	<version>v1.0.0</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>SysTagramGC</name>
 	<description>Aplicação de Postagem de Fotos e comentários</description>
@@ -24,58 +24,80 @@
 	</properties>
 
 	<dependencies>
+	
+		<dependency>
+	      <groupId>org.springframework.boot</groupId>
+	      <artifactId>spring-boot-starter-web</artifactId>
+	      <!--
+	      Removendo o tomcat para não ter conflito com o Jetty do Google Api Engine  
+	      <exclusions>
+	        <exclusion>
+	          <groupId>org.springframework.boot</groupId>
+	          <artifactId>spring-boot-starter-tomcat</artifactId>
+	        </exclusion>
+	      </exclusions>
+	      -->
+	    </dependency>
+				
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-rest</artifactId>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.session</groupId>
 			<artifactId>spring-session</artifactId>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>		
+		
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.google.zxing</groupId>
 			<artifactId>core</artifactId>
 			<version>3.2.1</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 		</dependency>
+		
 		<dependency>
 			<groupId>cglib</groupId>
 			<artifactId>cglib</artifactId>
 			<version>3.1</version>
 		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-mock -->
 		<dependency>
 		    <groupId>org.springframework</groupId>
@@ -88,7 +110,20 @@
     		<artifactId>google-cloud-storage</artifactId>
     		<version>1.14.0</version>
 		</dependency>
-		
+	    
+	    <dependency>
+			<groupId>com.google.appengine</groupId>
+			<artifactId>appengine-api-1.0-sdk</artifactId>
+			<version>1.9.60</version>
+		</dependency>
+	    
+	    <dependency>
+	      <groupId>javax.servlet</groupId>
+	      <artifactId>javax.servlet-api</artifactId>
+	      <version>3.1.0</version>
+	      <scope>provided</scope>
+	    </dependency>
+	    	    		
 	</dependencies>
 	
 	<build>
@@ -97,6 +132,16 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			
+			<plugin>
+        		<groupId>com.google.cloud.tools</groupId>
+        		<artifactId>appengine-maven-plugin</artifactId>
+        		<version>1.3.2</version>
+        		<configuration>
+          			<version>1</version>
+        		</configuration>
+      		</plugin>
+			
 		</plugins>
 	</build>
 	
