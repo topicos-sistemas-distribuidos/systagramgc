@@ -1,0 +1,169 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sd="http://www.thymeleaf.org/spring-data"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+<title>Meus Posts</title>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+</head>
+<body>
+	<section layout:fragment="header">
+		<h1>Meus Posts</h1>
+		<ol class="breadcrumb">
+			<li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+			<li class="active">Meus Posts</li>
+		</ol>
+	</section>
+	<div layout:fragment="content">
+	
+		<div class="box box-default">
+		<div class="box-header with-border">
+			<div>
+				<form enctype="application/x-www-form-urlencoded" method="post" th:action="${'/person/'} + ${person.id} + ${'/post/search'}">
+					<label>Intervalo:</label>
+					<input type="text" name="dates" class="form-control input-sm pull-left" id="dates"/>
+					<script>
+						$(function() {
+					 		$('input[name="dates"]').daterangepicker({ startDate: moment(), endDate: moment().add(2, 'day')});
+						})
+					</script>
+				</form>
+			</div>
+	
+		</div>
+		<!-- /.box-header -->
+		<div class="box-body">
+			Faz a busca nas postagens registrados
+		</div>
+		<!-- /.box-body -->
+	</div>	
+	
+	
+		<div class="box">
+			<div class="box-header with-border">
+				<h3 class="box-title">Listagem</h3>
+			</div>
+
+			<div class="row">
+
+				<!-- Lista com as fotos comentadas -->
+				<div th:each="row : ${list}" class="col-md-8">
+					<!-- Box Comment -->
+					<div class="box-header with-border">
+						<div class="user-block">
+							<img class="img-circle" th:src="${'/upload/image/users/'+row.person.user.id}" alt="User Image" />
+							<span class="username">
+								<a href="#" th:text="${row.person.name}"></a></span> <span class="description" th:text="${row.date}">
+							</span>
+						</div>
+						<!-- /.user-block -->
+					</div>
+					<!-- /.box-header -->
+					
+					<div class="box-body" style="">
+						<img class="img-responsive pad" alt="Image" th:src="${'/upload/picture/'} + ${row.picture.systemName}" />
+						<br></br>
+              				<span class="description" th:text="${row.picture.name}"></span> 
+              				<ul class="list-inline">
+								<li><a href="#" class="link-black text-sm" shape="rect"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like (<spam th:text="${row.amountOfPositive}"></spam>)</a>
+								</li>
+								<li><a href="#" class="link-black text-sm" shape="rect"><i class="fa fa-thumbs-o-down margin-r-5"></i> Unlike (<spam th:text="${row.amountOfNegative}"></spam>)</a>
+								</li>
+								<li class="pull-right">
+									<a href="#" class="link-black text-sm" shape="rect"><i class="fa fa-comments-o margin-r-5"></i> Comments (<spam th:text="${row.amountOfComments}"></spam>)</a>
+								</li>
+							</ul>
+					</div>
+					
+					<!-- /.box-body -->
+					<div th:each="row2 : ${row.comments}" class="box-footer box-comments" style="">
+						<div class="box-comment">
+							<!-- User image -->
+							<img class="img-circle img-sm" th:src="${'/upload/image/users/'+row2.person.user.id}" alt="User Image" />
+							<div class="comment-text">
+								<span class="username" th:text="${row2.person.name}"></span>
+								<span class="text-muted pull-right" th:text="${row2.date}"></span>
+								<!-- /.username -->
+								<p>
+									<span th:text="${row2.description}"></span>
+								</p>
+							</div>
+							<!-- /.comment-text -->
+						</div>
+						<!-- /.box-comment -->
+					</div>
+					<!-- /.box-footer -->
+					
+					<!-- Lista de likes do Post -->
+					<div th:each="row3 : ${row.listLikes}" class="box-footer box-comments" style="">
+						<div class="box-comment">
+							<!-- User image -->
+							<img class="img-circle img-sm" th:src="${'/upload/image/users/'+row3.person.user.id}" alt="User Image" />
+							<div class="comment-text">
+								<span class="username" th:text="${row3.person.name}"></span>
+								<span class="text-muted pull-right" th:text="${row3.date}"></span>
+								<!-- /.username -->
+								<p>
+									<div th:if="${row3.mylike} == true"> 
+										<i class="fa fa-thumbs-up"></i>
+									</div>
+									<div th:if="${row3.mylike} == false"> 
+										<i class="fa fa-thumbs-down"></i>
+									</div>									
+								</p>
+							</div>
+							<!-- /.comment-text -->
+						</div>
+						<!-- /.box-comment -->
+					</div>
+					<!-- /.box-footer -->
+					
+					
+				<!-- Formulário de novo comentário no post -->
+				<div class="box-footer" style="">
+					<div>
+					  <form enctype="application/x-www-form-urlencoded" th:object="${comment}" th:action="@{'/person/' + ${loginuser.person.id} + '/post/' + ${row.id} + '/comment'}" method="post">
+					    <img class="img-responsive img-circle img-sm" th:src="${'/upload/image/users/'+loginuserid}" alt="Alt Text"/>
+					    <!-- .img-push is used to add margin to elements next to floating images -->
+					    <div class="img-push">
+					      <input type="text" class="form-control input-sm" th:field="*{description}" id="description" placeholder="Press enter to post comment"/>
+					    </div>
+					  </form>
+				  	</div>
+				</div>
+
+				<!-- Formulário de novo like no post -->
+				<div class="box-footer" style="">
+					<div>
+					  <form id="like_form" enctype="application/x-www-form-urlencoded" th:object="${likes}" th:action="@{'/person/' + ${loginuser.person.id} + '/post/' + ${row.id} + '/likes'}" method="post">
+					    <img class="img-responsive img-circle img-sm" th:src="${'/upload/image/users/'+loginuserid}" alt="Alt Text"/>
+					    <!-- .img-push is used to add margin to elements next to floating images -->
+					    <div class="img-push">
+							<button type="submit" class="btn btn-default btn-xs">
+								<input type="hidden" id="mylike" name="mylike" value="true"></input>
+								<i class="fa fa-thumbs-o-up"></i> Like
+							</button>
+							<button type="submit" class="btn btn-default btn-xs">
+								<input type="hidden" id="mylike" name="mylike" value="false"></input>
+								<i class="fa fa-thumbs-o-down"></i> Unlike
+							</button>
+
+					    </div>
+					  </form>
+				  	</div>
+				</div>
+					
+				</div>
+				<!-- Final da Lista com as fotos comentadas e likes -->
+				
+			</div>
+
+		</div>
+		
+	</div>
+</body>
+</html>
