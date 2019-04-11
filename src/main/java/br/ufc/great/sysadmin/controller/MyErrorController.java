@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import br.ufc.great.sysadmin.model.Users;
+import br.ufc.great.sysadmin.util.Constantes;
 import br.ufc.great.sysadmin.util.MySessionInfo;
 
 @Controller
@@ -33,6 +34,7 @@ public class MyErrorController implements ErrorController  {
 			model.addAttribute("loginuserid", loginUser.getId());
 			model.addAttribute("acesso", acesso);			
 			model.addAttribute("loginuser", loginUser);
+			model.addAttribute("s3awsurl", new Constantes().s3awsurl);
 		}
 		
 	   Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);

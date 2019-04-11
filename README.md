@@ -1,5 +1,5 @@
-# SysTagram
-Aplicação para postar fotos e receber comentários. 
+# SysTagram Google Cloud
+Aplicação para postar fotos e receber comentários rodando em uma instância local apontando para o Bucket e Banco do Google Cloud.  
 
 Features
 ---
@@ -17,41 +17,81 @@ Sobre as operações para execução da aplicação
 
 1. Faça o clone do repositório.
 
-2. É preciso ter o mysql 5 instalado na sua instância.
-- Obs: algumas vezes você pode enfrentar problemas com o driver mysql se você estiver usando mysql> 5.6, por exemplo se você tiver usando mysql 8 ou posterior, então você tem que substituir o driver de acordo com sua versão. Assim, é necessário atualizar as dependências do pom.xml de acordo com sua configuração e versão local.
+2. Criação do Bucket no Google Cloud Storage. 
+* systagram-bucket
 
-3. Crie o banco dbsysweb e aponte para o banco.
+3. Adicionar a dependência do cloud storage no nosso projeto. Para isso, vá até o pom.xml.
+
+<dependency>
+    <groupId>com.google.cloud</groupId>
+    <artifactId>google-cloud-storage</artifactId>
+    <version>1.14.0</version>
+</dependency>
+
+4. Criar uma classe para salvar os arquivos no Bucket criado.
+
+5. Criar uma chave de acesso da aplicação para o projeto do Google Cloud.
+
+Devemos configurar a chave de acesso que será utilizada pela nossa aplicação para que possamos assim salvar as imagens nesse Bucket que criamos.
+
+Obs: Nós temos que ter as chaves de acesso com as permissões de envio de arquivos para o Bucket, precisamos fazer essa configuração na próxima etapa.
+
+Obs: Nós precisamos de uma chave com as credenciais necessárias que será utilizada por nossa aplicação para enviar as imagens.
+
+6. API
+
+a) Criar Google Service Key
+
+permitir-acesso-servicos-google-cloud
+
+Feito isso, devemos dar o nome para essa credencial que estamos configurando, podemos dar o nome que desejarmos, por exemplo permitir-acesso-servicos-google-cloud e na permissão Role escolha que tal conta terá a possibilidade de realizar edição no projeto, sendo assim possível tanto de realizar a leitura como a escrita de dados. Escolha a opção Editor para essa conta, para finalizar, faça o download da chave no formato JSON para que nossa aplicação que ainda está no ambiente local de desenvolvimento salve as imagens no Bucket.
+
+A criação do objeto Storage na classe FileSaver vai procurar essas credencias de acesso presentes no arquivo JSON através da variável de ambiente GOOGLE_APPLICATION_CREDENTIALS, precisamos configurar na nossa máquina essa variável de ambiente:
+
+Para configurar a variável de ambiente no MAC:  
+
+touch ~/.bash_profile
+open -a TextEdit.app ~/.bash_profile
+export GOOGLE_APPLICATION_CREDENTIALS=[Local da chave]
+
+b) Outra opção é passar o arquivo direto no código. Veja exemplo da appspring.
+
+7. Criar o banco de dados no Google Cloud (sql-systagramgc)
+a) Criar o banco
+b) Liberar o acesso de IP público. Para isso, clique em Show configuration options e na parte de redes autorizadas Authorize Networks coloque o endereço 0.0.0.0/0
+
+Obs: nesse ponto já pode fazer um teste local apontando para o Bucket e o Banco do Google Cloud. 
+
+8. É preciso ter o mysql 5 instalado na sua instância do Google Cloud SQL.
+
+9. Crie o banco dbsysweb e aponte para o banco.
 ```
 mysql> create database dbsysweb
 mysql> use dbsysweb
 ```
-
-4. Rode o script restaura-dbsysweb.sql para criar as tabelas com os dados de exemplo.
+10. Rode, na instância do Google Cloud SQL, o script restaura-dbsysweb.sql para criar as tabelas com os dados de exemplo.
 ```
 mysql> source scripts/sql/restaura-dbsysweb.sql
 ```
+11. Usuário admin (armando) tem senha armando.
 
-5. Usuário admin (armando) tem senha armando.
-
-6. Limpe o projeto via comando clean do maven.
+12. Limpe o projeto via comando clean do maven.
 ```
 $mvn clean
 ```
-7. Compile o projeto via modo teste do maven. 
+13. Compile o projeto via modo teste do maven. 
 ```
 $mvn test
 ```
-8. Execute a classe principal (SystemApplication) do projeto via maven. 
+14. Execute a classe principal (SystemApplication) do projeto via maven. 
 ```
 $mvn spring-boot:run
 ```
-9. Para os ambientes POSIX, é possível integrar todos esses comandos no seguinte pipe:
+15. Para os ambientes POSIX, é possível integrar todos esses comandos no seguinte pipe:
 ```
 $mvn clean && mvn test && mvn spring-boot:run
 ```
-
-Por padrão a aplicação roda em http://localhost:8080/login
-
+Por padrão a aplicação roda em http://localhost:8080
 
 Characteristics
 ---
@@ -61,11 +101,12 @@ Characteristics
 * Thymeleaf para view;
 * Mysql Database or others;
 * Basic entity crud;
+* Google Cloud Storage
+* Google Cloud SQL
 
 TODO
 ---
 
-* Atualmente a aplicação aponta para o banco dbsysweb, com isso, é preciso fazer os ajustes de controle de autenticação necessários integrar ao banco demo da aplicação restapi https://github.com/topicos-sistemas-distribuidos/restapi. 
 * Search in the listing;
 * Model of Dialog;
 * Template for sending e-mail with template;
@@ -130,5 +171,7 @@ References
 [9] Mysql 5. Database Management System. Available at https://dev.mysql.com/downloads/mysql
 
 [10] AdminLTE. Control panel template for web applications. Available at https://adminlte.io/themes/AdminLTE/index.html
+
+[11] Google Cloud. Available at https://console.cloud.google.com
 
 Questions, suggestions or any kind of criticism contact us by email armando@ufpi.edu.br

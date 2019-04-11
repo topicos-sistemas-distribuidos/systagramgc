@@ -36,36 +36,37 @@
                     <td th:text="${row.person.name}"></td> 
                     <td th:text="${row.email}"></td>
                     <td th:text="${row.enabled}"></td>
-                    <td><img alt="Image" th:src="${'/upload/image/users/'+row.id}" width="50" height="50" /></td>
+                    <td><img alt="Image" th:src="${s3awsurl+'users/'+row.id+'.png'}" width="50" height="50" /></td>
                     <td>
                         <a th:href="${'/users/edit/' + row.id}">editar</a> -
-                        <a th:href="${'/users/delete/' + row.id}">excluir</a>
+                        <a th:href="${'/users/delete/' + row.id}">excluir</a> -
                         <a th:href="${'/person/' + row.person.id + '/post'}">posts</a>
                     </td>
                 </tr>
             </table>
         </div>
-    </div>
-    
-    <div class="box box-default">
-		<div class="box-header with-border">
-			<h3 class="box-title">Pesquisa</h3>
-			<form enctype="application/x-www-form-urlencoded" method="post" th:action="${'/users/search'}">
-					<div>
-						<input type="text" class="form-control input-sm" placeholder="Search..." name="search" id="search"/> 
-						<span class="glyphicon glyphicon-search form-control-feedback"></span>
-					</div>
-			</form>
-					<!-- /.box-tools -->
+
+	 <div class="box box-default">
+			<div class="box-header with-border">
+				<h3 class="box-title">Pesquisa</h3>
+
+				<form enctype="application/x-www-form-urlencoded" method="post" th:action="${'/users/search'}">
+						<div>
+							<input type="text" class="form-control input-sm" placeholder="Search..." name="search" id="search"/> 
+							<span class="glyphicon glyphicon-search form-control-feedback"></span>
+						</div>
+				</form>
+
+						<!-- /.box-tools -->
+			</div>
+		<!-- /.box-header -->
+			<div class="box-body">
+				Faz a busca nos usuários registrados
+			</div>
+			<!-- /.box-body -->
 		</div>
 
-	<!-- /.box-header -->
-		<div class="box-body">
-			Faz a busca nos usuários registrados
-		</div>
-		<!-- /.box-body -->
-	</div>
-    
+    </div>
 </div>
 </body>
 </html>

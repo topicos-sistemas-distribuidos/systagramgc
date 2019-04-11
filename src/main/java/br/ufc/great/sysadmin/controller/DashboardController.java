@@ -15,6 +15,7 @@ import br.ufc.great.sysadmin.service.CommentService;
 import br.ufc.great.sysadmin.service.PictureService;
 import br.ufc.great.sysadmin.service.PostService;
 import br.ufc.great.sysadmin.service.UsersService;
+import br.ufc.great.sysadmin.util.Constantes;
 import br.ufc.great.sysadmin.util.MySessionInfo;
 
 /**
@@ -122,6 +123,7 @@ public class DashboardController {
     	model.addAttribute("acesso", acesso);
     	model.addAttribute("loginuser", loginUser);
     	model.addAttribute("list", list);
+    	model.addAttribute("s3awsurl", new Constantes().s3awsurl);
     	     	
         return "dashboard/index";
     }
@@ -161,6 +163,7 @@ public class DashboardController {
     	model.addAttribute("person", loginUser.getPerson());
     	model.addAttribute("acesso", acesso);
     	model.addAttribute("loginuser", loginUser);
+    	model.addAttribute("s3awsurl", new Constantes().s3awsurl);
     	
         return "dashboard/indexUser";
     }
